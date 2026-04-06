@@ -5,3 +5,4 @@ __pycache__/
 alpha-genetic-pipeline/.venv/
 alpha-genetic-pipeline/.ruff_cache/
 alpha-genetic-pipeline/output/
+docs/
