@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+.ruff_cache/
+*.pyc
+alpha-genetic-pipeline/.venv/
+alpha-genetic-pipeline/.ruff_cache/
+alpha-genetic-pipeline/output/

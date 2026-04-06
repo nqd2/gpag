@@ -1,0 +1,397 @@
+[ {
+    "Operator Name" : "abs(x)",
+    "Operator Type" : "Arithmetic",
+    "Description" : "Returns the absolute value of a number, removing any negative sign.",
+    "Detailed Explanation" : "The absolute value is often used to ensure that only the size of a value is considered, not its direction.\n\nExamples:\n\nabs(close - open)\n\nThis expression will output the absolute difference of the daily price change",
+    "Example Alpha Code" : "abs(close - open)"
+  }, {
+    "Operator Name" : "add(x, y, filter = false), x + y",
+    "Operator Type" : "Arithmetic",
+    "Description" : "Adds two or more inputs element wise. Set filter=true to treat NaNs as 0 before summing.",
+    "Detailed Explanation" : "The add operator performs element-wise addition on two or more inputs. If the optional filter parameter is set to true, any NaN values in the inputs are treated as zero before the addition.\n\nExample calculations\n\nSuppose you have two vectors:\n\n* x = [1, NaN, 3]\n\n* y = [4, 5, NaN]\n\n* add(x, y) returns [1+4, NaN+5, 3+NaN] = [5, NaN, NaN]\n\n* add(x, y, filter=true) returns [1+4, 0+5, 3+0] = [5, 5, 3]\n\nTips\n\nUse filter=true to treat NaNs as zeros.",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "densify(x)",
+    "Operator Type" : "Arithmetic",
+    "Description" : "Converts a grouping field of many buckets into lesser number of only available buckets so as to make working with grouping fields computationally efficient",
+    "Detailed Explanation" : "This operator converts a grouping field with many buckets into a lesser number of only the available buckets, making working with grouping fields computationally efficient. The example below will clarify the implementation.\n\nExample:\n\nSay a grouping field is provided as an integer (e.g., industry: tech -> 0, airspace -> 1, ...) and for a certain date, we have instruments with grouping field values among {0, 1, 2, 99}. Instead of creating 100 buckets and keeping 96 of them empty, it is better to just create 4 buckets with values {0, 1, 2, 3}. So, if the number of unique values in x is n, densify maps those values between 0 and (n-1).",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "divide(x, y)",
+    "Operator Type" : "Arithmetic",
+    "Description" : "x / y",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "inverse(x)",
+    "Operator Type" : "Arithmetic",
+    "Description" : "1 / x",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "log(x)",
+    "Operator Type" : "Arithmetic",
+    "Description" : "Calculates the natural logarithm of the input value. Commonly used to transform data that has positive values.",
+    "Detailed Explanation" : "The log(x) operator computes the natural logarithm (base e) of the input x. This transformation is widely used in finance to normalize data, reduce skewness, or convert multiplicative relationships into additive ones. The input x should be positive, as the logarithm is undefined for zero or negative values.\n\n* If x = 10, then log(10)  2.3026\n\n* If x = 1, then log(1) = 0\n\n* If x = 0.5, then log(0.5)  -0.6931",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "max(x, y, ..)",
+    "Operator Type" : "Arithmetic",
+    "Description" : "Maximum value of all inputs. At least 2 inputs are required",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : "max (close, vwap)"
+  }, {
+    "Operator Name" : "min(x, y ..)",
+    "Operator Type" : "Arithmetic",
+    "Description" : "Minimum value of all inputs. At least 2 inputs are required",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : "min(close, vwap)"
+  }, {
+    "Operator Name" : "multiply(x ,y, ... , filter=false), x * y",
+    "Operator Type" : "Arithmetic",
+    "Description" : "Multiplies two or more inputs element wise. Set filter=true to treat NaNs as 0 before multiplication",
+    "Detailed Explanation" : "Computes the product of all inputs. You can pass any number of scalars or series: multiply(a, b, c) = a  b  c. When filter=true, NaNs are replaced with 1 before the product; when false, any NaN propagates to the result.\n\nExample calculations:\n\n* multiply(2, 3) = 6\n\n* multiply(2, 3, 4) = 24\n\n* multiply(5, NaN, filter=false) = NaN\n\nmultiply(5, NaN, filter=true) = 5  1 = 5",
+    "Example Alpha Code" : "multiply(rank(-returns), rank(volume/adv20), filter=true)"
+  }, {
+    "Operator Name" : "power(x, y)",
+    "Operator Type" : "Arithmetic",
+    "Description" : "x ^ y",
+    "Detailed Explanation" : "power (x, y) operator can be used to implement popular mathematical functions. For example, sigmoid(close) can be implemented using power(x) as:\n1\n1/(1+ power(2.7182, -close)",
+    "Example Alpha Code" : "power (returns, volume/adv20); power (returns, volume/adv20, precise=true)"
+  }, {
+    "Operator Name" : "reverse(x)",
+    "Operator Type" : "Arithmetic",
+    "Description" : "- x",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "sign(x)",
+    "Operator Type" : "Arithmetic",
+    "Description" : "Returns the sign of a number: +1 for positive, -1 for negative, and 0 for zero. If the input is NaN, returns NaN. Input: Value of 7 instruments at day t: (2, -3, 5, 6, 3, NaN, -10) Output: (1, -1, 1, 1, 1, NaN, -1)",
+    "Detailed Explanation" : "The sign(x) operator determines whether a value is positive, negative, or zero. It is commonly used to quickly identify the direction of a value. If the input is not a number (NaN), the result will also be NaN.\n\nExample calculations\n\n* sign(5) returns 1\n\n* sign(-3.2) returns -1\n\n* sign(0) returns 0\n\n* sign(NaN) returns NaN\n\nExamples\n\nsign(close - open)\n\n* This expression returns:\n\n   * 1 if the closing price is higher than the opening price,\n\n   * -1 if the closing price is lower,\n\n0 if they are equal.",
+    "Example Alpha Code" : "sign(close - open)"
+  }, {
+    "Operator Name" : "signed_power(x, y)",
+    "Operator Type" : "Arithmetic",
+    "Description" : "x raised to the power of y such that final result preserves sign of x",
+    "Detailed Explanation" : "**sign(x) * (abs(x) ^ y)**x raised to the power of y such that final result preserves sign of x. For power of 2, x ^ y will be a parabola but signed_power(x, y) will be odd and one-to-one function (unique value of x for certain value of signed_power(x, y)) unlike parabola.\n\"signed_power.max-165x165.png\" (https://api.worldquantbrain.com/content/images/ajQEQ1jyo_cQ9fKSSpERmtkLDYI=/321/original/signed_power.max-165x165.png)\n**Example:**If x = 3, y = 2  abs(x) = 3  abs(x) ^ y = 9 and sign(x) = +1  sign(x) * (abs(x) ^ y) = signed_power(x, y)",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "sqrt(x)",
+    "Operator Type" : "Arithmetic",
+    "Description" : "Returns the non negative square root of x. Equivalent to power(x, 0.5); for signed roots use signed_power(x, 0.5).",
+    "Detailed Explanation" : "sqrt(x) = power(x, 0.5) for x  0. It reduces skew and compresses large positive values while keeping order. It returns NaN for x < 0. If you need a rootlike transform that keeps the sign for negative inputs, use signed_power(x, 0.5), which computes sign(x)*sqrt(abs(x)).\n\nExample calculations\n\n* sqrt(9) = 3\n\n* sqrt(0.25) = 0.5\n\n* sqrt(0) = 0\n\nsqrt(-4) = NaN (use signed_power(-4, 0.5) = -2 for a signpreserving root)",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "subtract(x, y, filter=false), x - y",
+    "Operator Type" : "Arithmetic",
+    "Description" : "Subtracts inputs left to right: x ? y ? ... Supports two or more inputs. Set filter=true to treat NaNs as 0 before subtraction.",
+    "Detailed Explanation" : "Performs elementwise subtraction on scalars or series. You can pass more than two inputs; evaluation is lefttoright: subtract(a, b, c) = ((a  b)  c). When filter=true, any NaN in the inputs is replaced with 0 before subtraction; when false, NaNs propagate.\n\nExample calculations for the calculation walkthrough\n\n* subtract(10, 3) = 7\n\n* subtract(10, 3, 2) = 5 (lefttoright: (103)2)\n\n* subtract(NaN, 5, filter=true) = 0  5 = 5\n\nsubtract(NaN, 5, filter=false) = NaN",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "and(input1, input2)",
+    "Operator Type" : "Logical",
+    "Description" : "Returns 1 ('true') if both inputs are 1 ('true'). Otherwise, returns 0 ('false').",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "if_else(input1, input2, input 3)",
+    "Operator Type" : "Logical",
+    "Description" : "The if_else operator returns one of two values based on a condition. If the condition is true, it returns the first value; if false, it returns the second value.",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : "if_else(event, alpha_1, alpha_2)"
+  }, {
+    "Operator Name" : "input1 < input2",
+    "Operator Type" : "Logical",
+    "Description" : "Returns 1 ('true') if input1 is a smaller than input2. Otherwise, returns 0 ('false').",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "input1 <= input2",
+    "Operator Type" : "Logical",
+    "Description" : "Returns 1 ('true') if input1 is a smaller or the same as input2. Otherwise, returns 0 ('false').",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "input1 == input2",
+    "Operator Type" : "Logical",
+    "Description" : "Returns 1 ('true') if input1 and input2 are the same. Otherwise, returns 0 ('false').",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "input1 > input2",
+    "Operator Type" : "Logical",
+    "Description" : "Returns 1 ('true') if input1 is a larger than input2. Otherwise, returns 0 ('false').",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "input1 >= input2",
+    "Operator Type" : "Logical",
+    "Description" : "Returns 1 ('true') if input1 is a larger or the same as input2. Otherwise, returns 0 ('false').",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "input1!= input2",
+    "Operator Type" : "Logical",
+    "Description" : "Returns 1 ('true') if input1 and input2 are different numbers. Otherwise, returns 0 ('false').",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "is_nan(input)",
+    "Operator Type" : "Logical",
+    "Description" : "If (input == NaN) return 1 else return 0",
+    "Detailed Explanation" : "is_nan(x) operator can be used to identify NaN values and replace them to a default value using if_else statement. For example:\n1\nif_else(is_nan(rank(sales)), 0.5, rank(sales))\nOpen example alpha in Simulate\n\nSimulation Settings\n| Region | Universe |    Language     | Decay | Delay | Truncation | Neutralization | Pasteurization | NaN Handling | Unit Handling | Max Trade | Max Position |\n|--------|----------|-----------------|-------|-------|------------|----------------|----------------|--------------|---------------|-----------|--------------|\n| USA    | TOP3000  | Fast Expression | 1     | 1     | 1          | Market         | On             | Off          | Verify        | OFF       | OFF          |\n\nRegion: USA\nUniverse: TOP3000\nLanguage: Fast Expression\nDecay: 1\nDelay: 1\nTruncation: 1\nNeutralization: Market\nPasteurization: On\nNaN Handling: Off\nUnit Handling: Verify\nMax Trade: OFF\nMax Position: OFF\nIn this example, in case sales value is NaN for any instrument, then the expression will replace it with the mean value of rank, that is 0.5.",
+    "Example Alpha Code" : "if_else(is_nan(rank(sales)), 0.5, rank(sales))"
+  }, {
+    "Operator Name" : "not(x)",
+    "Operator Type" : "Logical",
+    "Description" : "Returns the logical negation of x. Returns 0 when x is 1 ('true') and 1 when x is 0 ('false').",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "or(input1, input2)",
+    "Operator Type" : "Logical",
+    "Description" : "Returns 1 if either input is true (either input1 or input2 has a value of 1), otherwise it returns 0.",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "days_from_last_change(x)",
+    "Operator Type" : "Time Series",
+    "Description" : "Calculates the number of days since the last change in the value of a given variable.",
+    "Detailed Explanation" : "The days_from_last_change(x) operator returns how many days have passed since the last time the value of x changed. This is useful for tracking the \"age\" of the current value. Can be used as a trade_when condition.\n\nExample calculations\n\n|------------|----|\n| Date       | X  |\n| 2024-06-01 | 10 |\n| 2024-06-02 | 10 |\n| 2024-06-03 | 12 |\n| 2024-06-04 | 12 |\n| 2024-06-05 | 12 |\n| 2024-06-06 | 15 |\n\n* On 2024-06-05: days_from_last_change(x) = 2\n\n* On 2024-06-06: days_from_last_change(x) = 0\n\nExamples\n\nLast_earnings_date = days_from_last_change(ern2_earnrelease_d1_calendar_prev);\n\nalpha = rank(operating_income/cap);\n\ntrade_when(Last_earnings_date == 0, alpha, -1)",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "hump(x, hump = 0.01)",
+    "Operator Type" : "Time Series",
+    "Description" : "Limits amount and magnitude of changes in input (thus reducing turnover)",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : "hump(-ts_delta(close, 5), hump = 0.00001)"
+  }, {
+    "Operator Name" : "kth_element(x, d, k, ignore=\"NaN\")",
+    "Operator Type" : "Time Series",
+    "Description" : "Returns the K-th value from a time series by looking back over a specified number of ('d') days, with the option to ignore certain values. Commonly used for backfilling missing data.",
+    "Detailed Explanation" : "The kth_element(x, d, k) operator retrieves the k-th value from the input series x by searching through the last d days. You can specify which values to ignore (e.g., \"NaN\", \"0\") using the ignore parameter. This operator is especially useful for filling in missing data points (backfilling), where setting k=1 returns the most recent valid value.\n\nExample Calculations\n\nSuppose your input series for a stock's sales/assets ratio over 5 days is: [0.5, NaN, NaN, 0.7, 0]\n\nUsing kth_element(sales/assets, 5, k=\"1\", ignore=\"NaN 0\"):\n\n|------------|-------------|--------------------------------|--------|\n| Date       | Input Value | Lookback Window (up to 5 days) | Output |\n| 2024-06-01 | 0.5         | [0.5]                        | 0.5    |\n| 2024-06-02 | NaN         | [0.5, NaN]                   | 0.5    |\n| 2024-06-03 | NaN         | [0.5, NaN, NaN]              | 0.5    |\n| 2024-06-04 | 0.7         | [0.5, NaN, NaN, 0.7]         | 0.7    |\n| 2024-06-05 | 0           | [0.5, NaN, NaN, 0.7, 0]      | 0.7    |\n\n* If you have a time series with missing values (NaNs) and want to fill each missing value with the most recent non-NaN value, set k=1 and ignore=\"NaN\".\n\n* If you want the second most recent non-zero, non-NaN value, set k=2 and ignore=\"NaN 0\".\n\nWhile you can achieve the same result with ts_backfill, there are cases where you would prefer the kth_element operator, for example:\n\nExpression 1: kth_element(dividend,63,k=1,ignore=\"NaN 0\")\n\nExpression 2: ts_backfill(to_nan(sales/assets, value=0), 63)\n\nBoth expressions produce the same result. But using the kth_element operator is more efficient here, as it eliminates the need for an additional operator.",
+    "Example Alpha Code" : "kth_element(sales/assets,252,k=\"1\",ignore=\"NAN 0\")"
+  }, {
+    "Operator Name" : "last_diff_value(x, d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Returns the most recent value of x from the past d days that is different from the current value of x.",
+    "Detailed Explanation" : "The last_diff_value(x, d) operator helps you find the last value of a variable x within the previous d days that is not equal to its current value. This is useful for detecting when a value has changed and what the previous value was.\n\nExamples\n\nlast_diff_value(eps, 63)\n\n* Returns the most recent eps (earnings per share) in the last 60 days (~quarter) that differs from today's eps; if no change within 63 days, returns NaN.",
+    "Example Alpha Code" : "last_diff_value(eps, 63)"
+  }, {
+    "Operator Name" : "ts_arg_max(x, d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Returns the number of days since the maximum value occurred in the last d days of a time series. If today's value is the maximum, returns 0; if it was yesterday, returns 1, and so on.",
+    "Detailed Explanation" : "The ts_arg_max(x, d) operator finds the relative index (number of days ago) of the maximum value in the time series x over the past d days.\n\nExample calculations\n\nSuppose you have the following values for the past 6 days (with the first element being today):\n\nx = [6, 2, 8, 5, 9, 4]; d = 6\n\n* The maximum value is 9.\n\n* 9 occurred 4 days before today.\n\n* So, ts_arg_max(x, 6) returns 4.\n\nIf today's value is the maximum, the operator returns 0.\n\nExamples\n\nts_arg_max(close, 10)\n\n* This expression returns how many days ago the highest closing price occurred in the last 10 days.",
+    "Example Alpha Code" : "ts_arg_max(close, 10)"
+  }, {
+    "Operator Name" : "ts_arg_min(x, d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Returns the number of days since the minimum value occurred in a time series over the past d days. If today's value is the minimum, returns 0; if it was yesterday, returns 1, and so on.",
+    "Detailed Explanation" : "The ts_arg_min(x, d) operator finds how many days ago the minimum value appeared in the last d days of the time series x.\n\nExample calculations\n\nSuppose you have the following values for the past 6 days (with the first element being today):\n\ndata = [6, 2, 8, 5, 9, 4]\n\nThe minimum value is 2. It occurred 1 day before today. So, ts_arg_min(data, 6) returns 1.\n\nExamples\n\nts_arg_min(close, 10)\n\nThis expression returns the number of days since the lowest closing price in the last 10 days.",
+    "Example Alpha Code" : "ts_arg_min(close, 10)"
+  }, {
+    "Operator Name" : "ts_av_diff(x, d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Calculates the difference between a value and its mean over a specified period, ignoring NaN values in the mean calculation. In short, it returns x -- ts_mean(x, d) with NaNs ignored.",
+    "Detailed Explanation" : "The ts_av_diff(x, d) operator returns the difference between the current value x and the mean of x over the past d periods, excluding any NaN values from the mean calculation.\n\nExample calculations\n\nSuppose d = 6 and the values for the past 6 days are [6, 2, 8, 5, 9, NaN].\n\nThe mean is calculated as (6 + 2 + 8 + 5 + 9) / 5 = 6 (NaN is ignored).\n\nToday's value is in the first index which is 6. Hence, 6 - 6 = 0.\n\nExamples\n\nts_av_diff(close, 20)\n\n* Outputs today's deviation from the 20day mean of close, ignoring NaNs in the mean; positive when above average, negative when below.",
+    "Example Alpha Code" : "ts_av_diff(close, 20)"
+  }, {
+    "Operator Name" : "ts_backfill(x,lookback = d, k=1)",
+    "Operator Type" : "Time Series",
+    "Description" : "Replaces missing (NaN) values in a time series with the most recent valid value from a specified lookback window, improving data coverage and reducing risk from missing data.",
+    "Detailed Explanation" : "This helps maintain data integrity, increases coverage, and can reduce drawdown risk in your Alpha. You can also specify which recent value to use with the k parameter (e.g., the 2nd most recent non-NaN value).\n\nThe ts_backfill function takes x (input data or expression), lookback = d (number of days to look back), and an optional k (kth most recent valid value, default is 1).\n\nExample calculations\n\nSuppose you have a time series for a stock's daily volume over 5 days:\n\n|------------|--------|\n| Day        | Volumn |\n| 2024-06-01 | 100    |\n| 2024-06-02 | NaN    |\n| 2024-06-03 | 120    |\n| 2024-06-04 | NaN    |\n| 2024-06-05 | NaN    |\n\nUsing ts_backfill(volume, 3) on Day 5:\n\nLooks back up to 3 days for the most recent non-NaN value.\n\nFinds 120 on Day 3, so Day 5's value becomes 120.\n\nUsing ts_backfill(volume, 3, k=2) on Day 5:\n\nLooks for the 2nd most recent non-NaN value within 3 days.\n\nFinds 100 on Day 1, so Day 5's value becomes 100.\n\nExamples\n\nts_backfill(fnd6_newqv1300_xrdq, 252)\n\n* Each NaN is replaced with the most recent nonNaN value found within the last 252 trading days; if none exists within the window, the output stays NaN\n\nTip: Avoid setting the lookback period too long, as this may introduce outdated values and reduce signal quality.",
+    "Example Alpha Code" : "ts_backfill(fnd6_newqv1300_xrdq, 252)"
+  }, {
+    "Operator Name" : "ts_corr(x, y, d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Calculates the Pearson correlation between two variables, x and y, over the past d days, showing how closely they move together.",
+    "Detailed Explanation" : "This coefficient measures the strength and direction of the linear relationship between the two variables. The value ranges from -1 (perfect negative correlation) to 1 (perfect positive correlation), with 0 indicating no linear relationship. This operator is most effective when the data is normally distributed, and the relationship is linear.\n<math> C o r r e l a t i o n ( x , y ) =  i = t  d + 1 t ( x i  x   ) ( y i  y   )  i = t  d + 1 t ( x i  x   ) 2 ( y i  y   ) 2 </math>\nExamples\n\nInput: Value of 1 instrument in past 7 days: (2, 3, 5, 6, 3, 8, 10), and another instrument value in past 7 days: (100, 190, 150, 180, 210, 220, 240), d = 7, where first element is the latest\n\nOutput: 0.6891 (Pearson correlation coefficient formula)\n\nAlpha Example\n\nts_corr(vwap, close, 20)\n\n* This expression calculates the 20-day rolling Pearson correlation between vwap and close.",
+    "Example Alpha Code" : "ts_corr(vwap, close, 20)"
+  }, {
+    "Operator Name" : "ts_count_nans(x ,d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Counts the number of missing (NaN) values in a data series over a specified number of days.",
+    "Detailed Explanation" : "Suppose you have a data series for a stock's daily volume over 5 days, first element is the latest: [100, NaN, 200, NaN, 300]\n\n* Using ts_count_nans(volume, 5) on the last day will return 2, since there are two NaN values in the last 5 days.\n\nIf your data for the last 10 days is: [NaN, 50, 60, NaN, NaN, 80, 90, 100, NaN, 110]\n\n* ts_count_nans(x, 10) will return 4 (four NaNs in the last 10 days).",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "ts_covariance(y, x, d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Calculates the covariance between two time-series variables, y and x, over the past d days. Useful for measuring how two variables move together within a specified historical window.",
+    "Detailed Explanation" : "Covariance quantifies the direction and strength of the linear relationship between two variables. A positive covariance means the variables tend to move in the same direction, while a negative value means they move in opposite directions. The magnitude reflects the strength of this relationship, but it is sensitive to the scale of the variables.\n\nExample calculations\n\nSuppose you have two time-series:\n\n* y = [2, 4, 6, 8, 10]\n\n* x = [1, 3, 5, 7, 9]\n\n* d = 5 (using all 5 days)\n\nThe covariance is calculated as:\n\n1. Compute the mean of y and x:\n\n* mean_y = (2+4+6+8+10)/5 = 6\n\n* mean_x = (1+3+5+7+9)/5 = 5\n\n1. For each day, calculate (y_i - mean_y) * (x_i - mean_x):\n\n* (2-6)*(1-5) = 16\n\n* (4-6)*(3-5) = 4\n\n* (6-6)*(5-5) = 0\n\n* (8-6)*(7-5) = 4\n\n* (10-6)*(9-5) = 16\n\n1. Sum these values: 16 + 4 + 0 + 4 + 16 = 40\n\n2. Divide by the number of days: 40 / 5 = 8\n\nSo, ts_covariance(y, x, 5) returns 8.",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "ts_decay_linear(x, d, dense = false)",
+    "Operator Type" : "Time Series",
+    "Description" : "Applies a linear decay to time-series data over a set number of days, smoothing the data by averaging recent values and reducing the impact of older or missing data.",
+    "Detailed Explanation" : "Linear decay means more recent values have a higher weight, and older values have less influence. By default, it operates in sparse mode (dense = false), treating missing (NaN) values as zero. In dense mode, NaNs are not replaced.\n\nThis operator is useful for:\n\n* Reducing turnover by smoothing out sharp changes in your Alpha.\n\n* Limiting the effect of outliers and noise in your data.\n\n* Making your strategy more stable across days.\n\nExample calculations\n\nSuppose you have a time series: x = [2, 4, 6, 8, 10] and you want to apply ts_decay_linear(x, 3).\n\n* For the most recent value (10), the calculation uses the last 3 values: 6, 8, 10.\n\n* The weights are linear: 1 (oldest), 2, 3 (most recent).\n\n* Calculation: (61 + 82 + 10*3) / (1+2+3) = (6 + 16 + 30) / 6 = 52 / 6  8.67\n\nSo, the output for the last day is about 8.67, showing that recent values have more influence.\n\nTip: To get the most out of the ts_decay_linearoperator, use it in intermediate stages of your alphas, such as in the following example:\n\nSignal = ts_rank(ts_decay_linear(close, 5), 252);\n\nAlpha = rank(Signal);\n\nOtherwise, if you need decay at the end (using it on alpha variable in this case), adjust the decay setting directly in the simulation settings instead of using the operator.",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "ts_delay(x, d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Returns the value of a variable x from d days ago. Use this operator to access historical data points by specifying the desired time lag in days.",
+    "Detailed Explanation" : "This is useful for referencing past data in time series analysis, such as comparing current values to previous values or constructing lagged features for modeling.\n\nExample calculations\n\n* For a time series:\n\nSuppose you have the following daily closing prices for a stock:\n\n|------------|-------|\n| Day        | close |\n| 2024-06-01 | 100   |\n| 2024-06-02 | 102   |\n| 2024-06-03 | 101   |\n| 2024-06-04 | 105   |\n| 2024-06-05 | 107   |\n\nts_delay(close, 3) and today is day 2024-06-05, returns 101 (the value from Day 3).\n\nExamples\n\nts_delay(close, 5)\n\n* Returns the closing price from five trading days ago; use it to form lags for deltas and returns.",
+    "Example Alpha Code" : "ts_delay(close, 5)"
+  }, {
+    "Operator Name" : "ts_delta(x, d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Calculates the difference between a value and its delayed version over a specified period. Useful for measuring changes or momentum in time-series data.",
+    "Detailed Explanation" : "The ts_delta(x, d) operator computes the difference between the current value of x and its value d periods ago. This is a simple way to measure how much a variable has changed over a given time window, making it useful for detecting trends, momentum, or reversals in time-series data.\n\nExample calculations\n\nSuppose you have a time series of daily closing prices for a stock:\n\n|------------|-------|\n| Day        | Price |\n| 2024-06-01 | 100   |\n| 2024-06-02 | 102   |\n| 2024-06-03 | 105   |\n| 2024-06-04 | 103   |\n| 2024-06-05 | 108   |\n\n<br />If you want to calculate the 3-day delta for Day 5:\n\nts_delta(price, 3) on Day 5 = price on Day 5 - price on Day 3 = 108 - 105 = 3\n\nExamples\n\nts_delta(close, 5)\n\n**What to expect:**Today's close minus the close five days ago; positive for 5day up moves, negative for down moves.",
+    "Example Alpha Code" : "ts_delta(close, 5)"
+  }, {
+    "Operator Name" : "ts_mean(x, d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Calculates the simple average (mean) value of a variable x over the past d days.",
+    "Detailed Explanation" : "The ts_mean(x, d) operator computes the simple average of the values of x for the most recent d days. This is useful for smoothing out short-term fluctuations and identifying longer-term trends in time-series data.\n\nExample calculations\n\nSuppose you have the following values for x over the last 5 days:\n\n|------------|------------|\n| Day        | Value of x |\n| 2024-06-01 | 6          |\n| 2024-06-02 | 2          |\n| 2024-06-03 | 8          |\n| 2024-06-04 | 5          |\n| 2024-06-05 | 9          |\n\n<br />If you use ts_mean(x, 5), the calculation is:\n\n(6 + 2 + 8 + 5 + 9) / 5 = 30 / 5 = 6\n\nSo, ts_mean(x, 5) returns 6.\n\nExamples\n\nts_mean(returns, 21)\n\n* What to expect: Computes the 1month average daily return; smooths daytoday noise.",
+    "Example Alpha Code" : "ts_mean(returns, 21)"
+  }, {
+    "Operator Name" : "ts_product(x, d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Returns the product of the values of x over the past d days. Useful for calculating geometric means and compounding returns or growth rates.",
+    "Detailed Explanation" : "The ts_product(x, d) operator computes the product of the values of x for the last d days. This is especially useful in financial analysis for calculating geometric means, which are often preferred over arithmetic means for averaging rates of return or growth rates. For example, the geometric mean of daily returns over a period can be derived using ts_product.\n\nExample calculations\n\nIf you have daily returns for a stock over 5 days:\n\n* Returns: [1.01, 0.99, 1.02, 1.00, 1.03]\n\nts_product(returns, 5) will calculate:\n\n* 1.01  0.99  1.02  1.00  1.03 = 1.0501\n\nExamples\n\npower(ts_product(returns, 10), 1/10)",
+    "Example Alpha Code" : "power(ts_product(returns, 10), 1/10)"
+  }, {
+    "Operator Name" : "ts_quantile(x,d, driver=\"gaussian\" )",
+    "Operator Type" : "Time Series",
+    "Description" : "Calculates the ts_rank of the input and transforms it using the inverse cumulative distribution function (quantile function) of a specified probability distribution (default: Gaussian/normal). This helps to normalize or reshape the distribution of your data over a rolling window.",
+    "Detailed Explanation" : "The ts_quantile(x, d, driver=\"gaussian\") operator first computes the time-series rank of the input x over the past d days for each instrument. It then applies the inverse cumulative distribution function (quantile function) of the chosen distribution (driver) to these ranks. Supported distributions are \"gaussian\" (default), \"uniform\", and \"cauchy\".\n\nExample 1\n\n* **Input:**Value of 1 instrument in past 7 days where first element is the latest: (8, 10, 4, 6, 5, 3, 2), d: 7, driver: 'gaussian' Output: quantile = 0.82 from SD = 2.82, mean = 5.43, zscore = 0.911\n\n- ts_quantile(anl14_mean_div_fy1/cap, 252, driver=\"gaussian\")\n\nThe past252day history is mapped to a Gaussianlike shape while preserving timeseries order, often making the series more symmetric and comparable over time.",
+    "Example Alpha Code" : "ts_quantile(anl14_mean_div_fy1/cap, 252, driver=\"gaussian\")"
+  }, {
+    "Operator Name" : "ts_rank(x, d, constant = 0)",
+    "Operator Type" : "Time Series",
+    "Description" : "Ranks the value of a variable for each instrument over a specified number of past days, returning the rank of the current value (optionally adjusted by a constant). Useful for normalizing time-series data and highlighting relative performance over time.",
+    "Detailed Explanation" : "The ts_rank operator evaluates how the current value of a variable compares to its values over a defined lookback period (d days) for each instrument. It returns a normalized rank (between 0 and 1) of the current value within that window, optionally shifted by a constant. This is helpful for identifying trends, momentum, or reversals in time-series data.\n\nExample calculations\n\nSuppose you have the following closing prices for a stock over 5 days: [10, 12, 11, 15, 13]\n\n* To calculate ts_rank(close, 5) for the last day:\n\n   * Rank the last value (13) among [10, 12, 11, 15, 13]\n\n   * Sorted: [10, 11, 12, 13, 15]\n\n   * 13 is the 4th value out of 5 (0-based index: 3)\n\n   * Normalized rank: 3 / (5 - 1) = 0.75\n\nIf you use a constant, e.g., ts_rank(close, 5, 0.1), the result would be 0.75 + 0.1 = 0.85.\n\nExamples\n\nts_rank(pretax_income, 252)\n\n* This ranks a company's current pretax income within its own historical range from the past year.\n\nrank(ts_rank(cap/income, 252))\n\n* This formula first normalizes each stock's P/E ratio by ranking it against its own one-year history (ts_rank). Then, it performs a cross-sectional rank on those historical percentiles, allowing us to identify which stocks are most expensive or inexpensive relative to their own past valuation, rather than comparing their absolute P/E ratios.",
+    "Example Alpha Code" : "ts_rank(pretax_income, 252)"
+  }, {
+    "Operator Name" : "ts_regression(y, x, d, lag = 0, rettype = 0)",
+    "Operator Type" : "Time Series",
+    "Description" : "Returns various parameters related to regression function",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : "ts_regression(ts_mean(volume, 2), ts_returns(close, 2), 252)"
+  }, {
+    "Operator Name" : "ts_scale(x, d, constant = 0)",
+    "Operator Type" : "Time Series",
+    "Description" : "Scales a time series to a 0--1 range based on its minimum and maximum values over a specified period, with an optional constant shift.",
+    "Detailed Explanation" : "The ts_scale(x, d, constant = 0) operator normalizes a time series by scaling each value between 0 and 1, using the minimum and maximum values from the last d days. You can also add a constant to shift the scaled result. This is similar to the scale_down operator but works specifically on time series data.\n\nThe formula is:\n\nts_scale(x, d, constant) = (x - ts_min(x, d)) / (ts_max(x, d) - ts_min(x, d)) + constant\n\nExample calculations\n\nSuppose d = 6 and the values for the last 6 days are data = [6, 2, 8, 5, 9, 4] (with the first element being today's value):\n\n* ts_min(x, d) = 2\n\n* ts_max(x, d) = 9\n\nIf you use ts_scale(x, d, constant = 1) for today's value (6):\n\nts_scale(data, 6, 1) = 1 + (6 - 2) / (9 - 2) = 1 + 4 / 7  1.57\n\nExamples\n\nts_scale(close, 252, constant=0)\n\n* Scales today's close to [0,1] within its 1year range; 0 at the 1year low, 1 at the 1year high.\n\nTip: When performing regression calculations where the Y variable represents a proportion or percentage, you can apply ts_scale to your X variable if needed. However, keep in mind that this scaling method is highly sensitive to outliers in the time series data, as extreme values can disproportionately affect the minimum and maximum used for normalization.ts_std_dev(x, d).",
+    "Example Alpha Code" : "ts_scale(close, 252, constant=0)"
+  }, {
+    "Operator Name" : "ts_std_dev(x, d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Calculates the standard deviation of a data series x over the past d days, measuring how much the values deviate from their mean during that period.",
+    "Detailed Explanation" : "The ts_std_dev(x, d) operator returns the standard deviation of the input series x for the last d days. Standard deviation is a key statistical measure that quantifies the amount of variation or dispersion in a dataset. In the context of time series, it helps you understand how volatile or stable a variable (such as returns or prices) has been over a specified window.\n\nA low standard deviation means values are close to the mean, while a high standard deviation indicates values are more spread out.\n\nExample calculations\n\nSuppose you have daily returns for a stock over the last 5 days: x = [0.01, 0.02, -0.01, 0.00, 0.03]\n\nTo calculate the 5-day standard deviation:\n\n1. Compute the mean: (0.01 + 0.02 + -0.01 + 0.00 + 0.03) / 5 = 0.01\n\n2. Compute squared deviations:\n\n(0.01 - 0.01)2 = 0\n\n(0.02 - 0.01)2 = 0.0001\n\n(-0.01 - 0.01)2 = 0.0004\n\n(0.00 - 0.01)2 = 0.0001\n\n(0.03 - 0.01)2 = 0.0004\n\n1. Average the squared deviations: (0 + 0.0001 + 0.0004 + 0.0001 + 0.0004) / 5 = 0.0002\n\n2. Take the square root: sqrt(0.0002)  0.0141\n\nSo, ts_std_dev(x, 5) would return approximately 0.0141.\n\nExamples\n\nts_std_dev(returns, 21)\n\nCalculates the 21day rolling standard deviation of daily returns; a proxy for onemonth stock volatility.",
+    "Example Alpha Code" : "ts_std_dev(returns, 21)"
+  }, {
+    "Operator Name" : "ts_step(1)",
+    "Operator Type" : "Time Series",
+    "Description" : "Returns a counter of days, incrementing by one each day.",
+    "Detailed Explanation" : "**ts_step(1)**is most commonly used as an x variable in functions like ts_regression, where it serves as a day counter. It helps represent time intervals in the regression analysis.\n\nExamples\n\nts_regression(returns, ts_step(1), 60, rettype=0)\n\n* ts_step(1) acts as the independent variable (x), counting days backward in the simulation. This allows the function to regress the returns over a 60-day window.",
+    "Example Alpha Code" : "ts_regression(returns, ts_step(1), 60, rettype=0)"
+  }, {
+    "Operator Name" : "ts_sum(x, d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Sum values of x for the past d days.",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "ts_zscore(x, d)",
+    "Operator Type" : "Time Series",
+    "Description" : "Calculates the Z-score of a time series, showing how far today's value is from the recent average, measured in standard deviations. Useful for standardizing and comparing values over time.",
+    "Detailed Explanation" : "The ts_zscore(x, d) operator computes the Z-score for each value in a time series. This tells you how many standard deviations today's value is from the mean of the past d days. It helps to normalize data, making it easier to compare values across different time periods or instruments, and can reduce the impact of outliers.\n\nExample calculations\n\nSuppose you have a time series of daily closing prices for a stock over 5 days: [10, 12, 11, 13, 15]. To calculate the Z-score for the last value (15) with a window of 5 days:\n\n* Mean of last 5 days: (10 + 12 + 11 + 13 + 15) / 5 = 12.2\n\n* Standard deviation of last 5 days:  1.92\n\n* Z-score for 15: (15 - 12.2) / 1.92  1.46\n\nThis means today's value (15) is about 1.46 standard deviations above the recent average.\n\nExamples\n\nts_zscore(returns, 63)\n\n* What to expect: Standardizes returns by subtracting the 63day mean and dividing by the 63day std; values are in \"sigma\" units.\n\nTips\n\n* ts_zscore can be useful to standardize different fields before using them in an Alpha.\n\n* Combining ts_zscore with cross-sectional operators like rank or quantile can produce stronger signals compared to using either method alone, as it incorporates both standardized scaling and relative comparison.",
+    "Example Alpha Code" : "ts_zscore(returns, 63)"
+  }, {
+    "Operator Name" : "normalize(x, useStd = false, limit = 0.0)",
+    "Operator Type" : "Cross Sectional",
+    "Description" : "Calculates the mean value of all valid alpha values for a certain date, then subtracts that mean from each element",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "quantile(x, driver = gaussian, sigma = 1.0)",
+    "Operator Type" : "Cross Sectional",
+    "Description" : "Rank the raw vector, shift the ranked Alpha vector, apply distribution (gaussian, cauchy, uniform). If driver is uniform, it simply subtract each Alpha value with the mean of all Alpha values in the Alpha vector",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : "quantile(close, driver = gaussian, sigma = 0.5 )"
+  }, {
+    "Operator Name" : "rank(x, rate=2)",
+    "Operator Type" : "Cross Sectional",
+    "Description" : "Ranks the input among all the instruments and returns an equally distributed number between 0.0 and 1.0. For precise sort, use the rate as 0",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "scale(x, scale=1, longscale=1, shortscale=1)",
+    "Operator Type" : "Cross Sectional",
+    "Description" : "Scales input to booksize. We can also scale the long positions and short positions to separate scales by mentioning additional parameters to the operator",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : "scale(returns, scale=4); scale (returns, scale= 1) + scale (close, scale=20); scale (returns, longscale=4, shortscale=3)"
+  }, {
+    "Operator Name" : "winsorize(x, std=4)",
+    "Operator Type" : "Cross Sectional",
+    "Description" : "Winsorizes x to make sure that all values in x are between the lower and upper limits, which are specified as multiple of std. Input: Value of 7 instruments at day t: (2, 4, 5, 6, 3, 8, 10), std: 1 Output: (2.81, 4, 5, 6, 3, 8, 8.03) from SD. = 2.61, mean = 5.42",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "zscore(x)",
+    "Operator Type" : "Cross Sectional",
+    "Description" : "Z-score is a numerical measurement that describes a value's relationship to the mean of a group of values. Z-score is measured in terms of standard deviations from the mean",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : "zscore(close)"
+  }, {
+    "Operator Name" : "vec_avg(x)",
+    "Operator Type" : "Vector",
+    "Description" : "Taking mean of the vector field x Input: Vector of value of 1 instrument in a day: (2, 3, 5, 6, 3, 8, 10) Output: 37 / 7 = 5.29",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "vec_sum(x)",
+    "Operator Type" : "Vector",
+    "Description" : "Sum of vector field x Input: Vector of value of 1 instrument in a day: (2, 3, 5, 6, 3, 8, 10) Output: 2 + 3 + 5 + 6 + 3 + 8 + 10 = 37",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "bucket(rank(x), range=\"0, 1, 0.1\" or buckets = \"2,5,6,7,10\")",
+    "Operator Type" : "Transformational",
+    "Description" : "Convert float values into indexes for user-specified buckets. Bucket is useful for creating group values, which can be passed to GROUP as input",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : "my_group = bucket(rank(volume), range=\"0.1,1,0.1\");\ngroup_neutralize(sales/assets, my_group)"
+  }, {
+    "Operator Name" : "trade_when(x, y, z)",
+    "Operator Type" : "Transformational",
+    "Description" : "Used in order to change Alpha values only under a specified condition and to hold Alpha values in other cases. It also allows to close Alpha positions (assign NaN values) under a specified condition",
+    "Detailed Explanation" : "This operator can be used to change Alpha values only under a specified condition and to retain Alpha values in other cases. It also allows for closing Alpha positions (assigning NaN values) under a specified condition.\n\nTrade_When (x=triggerTradeExp, y=AlphaExp, z=triggerExitExp)\n\nIf triggerExitExp > 0, Alpha = NaN.\n\nElse if triggerTradeExp > 0, Alpha = AlphaExp;\n\nelse, Alpha = previousAlpha\n\nThis operator may help reduce correlation and reduce turnover.\n\nExamples:\n\nTrade_When (volume >= ts_sum(volume,5)/5, rank(-returns), -1)\n\nIf (volume >= ts_sum(volume,5)/5), Alpha = rank(-returns);\n\nelse trade previous Alpha;\n\nexit condition is always false.\n\nTrade_When (volume >= ts_sum(volume,5)/5, rank(-returns), abs(returns) > 0.1)\n\nIf abs(returns) > 0.1, Alpha = nan;\n\nelse if volume >= ts_sum(volume,5)/5, Alpha = rank(-returns);\n\nelse trade previous Alpha.",
+    "Example Alpha Code" : "Trade_When (volume >= ts_sum(volume,5)/5, rank(-returns), -1)"
+  }, {
+    "Operator Name" : "group_backfill(x, group, d, std = 4.0)",
+    "Operator Type" : "Group",
+    "Description" : "If a certain value for a certain date and instrument is NaN, from the set of same group instruments, calculate winsorized mean of all non-NaN values over last d days",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "group_mean(x, weight, group)",
+    "Operator Type" : "Group",
+    "Description" : "All elements in group equals to the mean",
+    "Detailed Explanation" : "group_mean(x, group) operator can be used to calculate harmonic mean of datafields. Harmonic mean gives equal weight to each value in terms of their reciprocal contribution and is considered a better method for calculating average for fundamental ratios and factors. For example, Harmonic mean of P/E ratio (price-to-earnings) for an industry can be calculated as:\n1\n1 /(group_mean(eps/close,1, industry))",
+    "Example Alpha Code" : "1 /(group_mean(eps/close,1, industry))"
+  }, {
+    "Operator Name" : "group_neutralize(x, group)",
+    "Operator Type" : "Group",
+    "Description" : "Neutralizes Alpha against groups. These groups can be subindustry, industry, sector, country or a constant",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "group_rank(x, group)",
+    "Operator Type" : "Group",
+    "Description" : "Each elements in a group is assigned the corresponding rank in this group",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : "group_rank(x, subindustry)"
+  }, {
+    "Operator Name" : "group_scale(x, group)",
+    "Operator Type" : "Group",
+    "Description" : "Normalizes the values in a group to be between 0 and 1. (x - groupmin) / (groupmax - groupmin)",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  }, {
+    "Operator Name" : "group_zscore(x, group)",
+    "Operator Type" : "Group",
+    "Description" : "Calculates group Z-score - numerical measurement that describes a value's relationship to the mean of a group of values. Z-score is measured in terms of standard deviations from the mean. zscore = (data - mean) / stddev of x for each instrument within its group. Input: Value of 5 instruments of Group A: (100, 0, 50, 60, 25) Output: (1.57, -1.39, 0.09, 0.39, -0.65)",
+    "Detailed Explanation" : "",
+    "Example Alpha Code" : ""
+  } ]
