@@ -8,17 +8,22 @@ from dataclasses import dataclass, field
 from collections import defaultdict, Counter
 import random
 
+from config import defaults
 from modules.genentic.genetic_engine import AlphaIndividual
 from modules.genentic.simulator import SimulationResult
+from modules.analytics.brain_rule_schema import DEFAULT_REQUIRED_CHECK_NAMES
 
 
 @dataclass
 class FilterConfig:
-    min_sharpe: float = 1.0
-    min_returns: float = 0.01
-    max_turnover: float = 0.7
-    min_fitness: float = 0.5
-    max_pairwise_correlation: float = 0.70
+    min_sharpe: float = defaults.MIN_SHARPE
+    min_returns: float = defaults.MIN_RETURNS
+    min_turnover: float = defaults.MIN_TURNOVER
+    max_turnover: float = defaults.MAX_TURNOVER
+    min_fitness: float = defaults.MIN_FITNESS
+    max_pairwise_correlation: float = defaults.MAX_PAIRWISE_CORRELATION
+    use_brain_checks: bool = True
+    required_brain_check_names: Set[str] = field(default_factory=lambda: set(DEFAULT_REQUIRED_CHECK_NAMES))
 
 
 @dataclass
@@ -53,6 +58,10 @@ class AlphaFilter:
             result.passed = False
             result.fail_reasons.append("Returns below threshold")
             return result
+        if simulation.turnover < self.config.min_turnover:
+            result.passed = False
+            result.fail_reasons.append("Turnover below threshold")
+            return result
         if simulation.turnover > self.config.max_turnover:
             result.passed = False
             result.fail_reasons.append("Turnover above threshold")
@@ -61,6 +70,28 @@ class AlphaFilter:
             result.passed = False
             result.fail_reasons.append("Fitness below threshold")
             return result
+
+        if self.config.use_brain_checks and simulation.brain_checks:
+            checks_by_name: Dict[str, str] = {}
+            for c in simulation.brain_checks:
+                if not isinstance(c, dict):
+                    continue
+                name = c.get("name")
+                res = c.get("result")
+                if isinstance(name, str) and isinstance(res, str):
+                    checks_by_name[name] = res.upper()
+
+            missing_or_not_passed = []
+            for required_name in self.config.required_brain_check_names:
+                res = checks_by_name.get(required_name)
+                if res != "PASS":
+                    missing_or_not_passed.append(required_name)
+
+            if missing_or_not_passed:
+                result.passed = False
+                result.fail_reasons.append(f"Brain checks not passed: {sorted(missing_or_not_passed)[:3]}")
+                return result
+
         corr_passed, max_corr, corr_details = self._check_decorrelation(individual.expression)
         result.max_correlation = max_corr
         result.correlation_details = corr_details

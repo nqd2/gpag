@@ -24,6 +24,8 @@ class SimulationResult:
     is_valid: bool = True
     error_message: str = ""
     simulated_metrics: Dict = field(default_factory=dict)
+    # Raw IS Testing "checks" extracted from BRAIN simulation payload (when available).
+    brain_checks: List[Dict] = field(default_factory=list)
 
 
 class AlphaSimulator:

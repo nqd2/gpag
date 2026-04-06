@@ -5,8 +5,6 @@ Defines the building blocks: operators, data fields, and groupings.
 
 from dataclasses import dataclass, field
 from typing import List, Optional
-import json
-from pathlib import Path
 
 # Price-based fields
 PRICE_FIELDS = [
@@ -90,121 +88,96 @@ class Operator:
     description: str = ""
 
 
-def _extract_operator_tokens(raw_name: str) -> List[str]:
-    tokens: List[str] = []
-    for part in raw_name.split(","):
-        token = part.strip()
-        if not token:
-            continue
-        if "(" in token:
-            fn_name = token.split("(", 1)[0].strip()
-            if fn_name:
-                tokens.append(fn_name)
-            continue
-        if any(sym in token for sym in ("+", "-", "*", "/", "<", ">", "=", "!")):
-            continue
-        tokens.append(token)
-    return tokens
+UNARY_OPERATORS = [
+    # Cross-sectional
+    Operator("rank", 1, category="cross_sectional"),
+    Operator("zscore", 1, category="cross_sectional"),
+    Operator("scale", 1, category="cross_sectional"),
+    Operator("normalize", 1, category="cross_sectional"),
+    Operator("winsorize", 1, category="cross_sectional"),
+    Operator("quantile", 1, category="cross_sectional"),
+    # Arithmetic / logical
+    Operator("abs", 1, category="math"),
+    Operator("sign", 1, category="math"),
+    Operator("log", 1, category="math"),
+    Operator("sqrt", 1, category="math"),
+    Operator("reverse", 1, category="math"),
+    Operator("inverse", 1, category="math"),
+    Operator("densify", 1, category="math"),
+    Operator("not", 1, category="logical"),
+    Operator("is_nan", 1, category="logical"),
+    # Vector
+    Operator("vec_sum", 1, category="vector"),
+    Operator("vec_avg", 1, category="vector"),
+    # Transformational
+    Operator("bucket", 1, category="transformational"),
+]
 
+TS_OPERATORS = [
+    Operator("ts_mean", 1, has_time_param=True, category="time_series"),
+    Operator("ts_std_dev", 1, has_time_param=True, category="time_series"),
+    Operator("ts_sum", 1, has_time_param=True, category="time_series"),
+    Operator("ts_rank", 1, has_time_param=True, category="time_series"),
+    Operator("ts_quantile", 1, has_time_param=True, category="time_series"),
+    Operator("ts_arg_min", 1, has_time_param=True, category="time_series"),
+    Operator("ts_arg_max", 1, has_time_param=True, category="time_series"),
+    Operator("ts_count_nans", 1, has_time_param=True, category="time_series"),
+    Operator("ts_decay_linear", 1, has_time_param=True, category="time_series"),
+    Operator("ts_product", 1, has_time_param=True, category="time_series"),
+    Operator("ts_delay", 1, has_time_param=True, category="time_series"),
+    Operator("ts_backfill", 1, has_time_param=True, category="time_series"),
+    Operator("ts_av_diff", 1, has_time_param=True, category="time_series"),
+    Operator("ts_delta", 1, has_time_param=True, category="time_series"),
+    Operator("hump", 1, has_time_param=True, category="time_series"),
+    Operator("last_diff_value", 1, has_time_param=True, category="time_series"),
+    Operator("kth_element", 1, has_time_param=True, category="time_series"),
+]
 
-def _load_documented_operator_names() -> set:
-    operators_path = Path(__file__).resolve().parents[3] / "docs" / "operators.json"
-    if not operators_path.exists():
-        return set()
-    try:
-        data = json.loads(operators_path.read_text(encoding="utf-8"))
-    except (json.JSONDecodeError, OSError):
-        return set()
-    names = set()
-    for item in data:
-        raw_name = item.get("Operator Name", "")
-        for token in _extract_operator_tokens(raw_name):
-            names.add(token)
-    return names
+BINARY_OPERATORS = [
+    # Function-form arithmetic from WQ docs
+    Operator("add", 2, category="arithmetic"),
+    Operator("subtract", 2, category="arithmetic"),
+    Operator("multiply", 2, category="arithmetic"),
+    Operator("divide", 2, category="arithmetic"),
+    Operator("power", 2, category="arithmetic"),
+    Operator("signed_power", 2, category="arithmetic"),
+    Operator("max", 2, category="arithmetic"),
+    Operator("min", 2, category="arithmetic"),
+    # Symbolic aliases kept for backward compatibility
+    Operator("+", 2, category="arithmetic"),
+    Operator("-", 2, category="arithmetic"),
+    Operator("*", 2, category="arithmetic"),
+    Operator("/", 2, category="arithmetic"),
+    # Logical operators
+    Operator("and", 2, category="logical"),
+    Operator("or", 2, category="logical"),
+    Operator("equal", 2, category="logical"),
+    Operator("not_equal", 2, category="logical"),
+    Operator("greater", 2, category="logical"),
+    Operator("greater_equal", 2, category="logical"),
+    Operator("less", 2, category="logical"),
+    Operator("less_equal", 2, category="logical"),
+]
 
+BINARY_TS_OPERATORS = [
+    Operator("ts_corr", 2, has_time_param=True, category="time_series", time_param_range=(5, 60)),
+    Operator("ts_covariance", 2, has_time_param=True, category="time_series", time_param_range=(5, 60)),
+]
 
-DOCUMENTED_OPERATOR_NAMES = _load_documented_operator_names()
-OPERATOR_NAME_ALIASES = {
-    "ts_stddev": "ts_std_dev",
-    "decay_linear": "ts_decay_linear",
-    "neg": "reverse",
-}
+TERNARY_OPERATORS = [
+    Operator("if_else", 3, category="logical"),
+    Operator("trade_when", 3, category="transformational"),
+    Operator("ts_regression", 3, has_time_param=True, category="time_series", time_param_range=(5, 120)),
+]
 
-
-def _canonical_operator_name(name: str) -> str:
-    return OPERATOR_NAME_ALIASES.get(name, name)
-
-
-def _filter_to_documented(operators: List[Operator]) -> List[Operator]:
-    if not DOCUMENTED_OPERATOR_NAMES:
-        return operators
-    filtered = [op for op in operators if _canonical_operator_name(op.name) in DOCUMENTED_OPERATOR_NAMES]
-    return filtered or operators
-
-
-UNARY_OPERATORS = _filter_to_documented(
-    [
-        Operator("rank", 1, category="cross_sectional"),
-        Operator("zscore", 1, category="cross_sectional"),
-        Operator("scale", 1, category="cross_sectional"),
-        Operator("normalize", 1, category="cross_sectional"),
-        Operator("abs", 1, category="math"),
-        Operator("sign", 1, category="math"),
-        Operator("log", 1, category="math"),
-        Operator("sqrt", 1, category="math"),
-        Operator("reverse", 1, category="math"),
-    ]
-)
-
-TS_OPERATORS = _filter_to_documented(
-    [
-        Operator("ts_mean", 1, has_time_param=True, category="time_series"),
-        Operator("ts_std_dev", 1, has_time_param=True, category="time_series"),
-        Operator("ts_sum", 1, has_time_param=True, category="time_series"),
-        Operator("ts_min", 1, has_time_param=True, category="time_series"),
-        Operator("ts_max", 1, has_time_param=True, category="time_series"),
-        Operator("ts_rank", 1, has_time_param=True, category="time_series"),
-        Operator("ts_delta", 1, has_time_param=True, category="time_series"),
-        Operator("ts_delay", 1, has_time_param=True, category="time_series"),
-        Operator("ts_arg_max", 1, has_time_param=True, category="time_series"),
-        Operator("ts_arg_min", 1, has_time_param=True, category="time_series"),
-        Operator("ts_decay_linear", 1, has_time_param=True, category="smoothing"),
-    ]
-)
-
-BINARY_OPERATORS = _filter_to_documented(
-    [
-        Operator("+", 2, category="arithmetic"),
-        Operator("-", 2, category="arithmetic"),
-        Operator("*", 2, category="arithmetic"),
-        Operator("/", 2, category="arithmetic"),
-        Operator("max", 2, category="arithmetic"),
-        Operator("min", 2, category="arithmetic"),
-    ]
-)
-
-BINARY_TS_OPERATORS = _filter_to_documented(
-    [
-        Operator("ts_corr", 2, has_time_param=True, category="time_series", time_param_range=(5, 60)),
-        Operator(
-            "ts_covariance",
-            2,
-            has_time_param=True,
-            category="time_series",
-            time_param_range=(5, 60),
-        ),
-    ]
-)
-
-GROUP_OPERATORS = _filter_to_documented(
-    [
-        Operator("group_rank", 1, category="group"),
-        Operator("group_zscore", 1, category="group"),
-        Operator("group_mean", 1, category="group"),
-        Operator("group_neutralize", 1, category="group"),
-        Operator("group_scale", 1, category="group"),
-    ]
-)
+GROUP_OPERATORS = [
+    Operator("group_rank", 1, category="group"),
+    Operator("group_zscore", 1, category="group"),
+    Operator("group_mean", 1, category="group"),
+    Operator("group_neutralize", 1, category="group"),
+    Operator("group_scale", 1, category="group"),
+    Operator("group_backfill", 1, category="group"),
+]
 
 GROUP_PARAMS = ["industry", "sector", "subindustry", "market_cap_bucket", "country"]
 
@@ -234,6 +207,9 @@ class TreeNode:
                 return f"{self.value}({self.children[0].to_string()})"
             if len(self.children) == 2:
                 return f"{self.value}({self.children[0].to_string()}, {self.children[1].to_string()})"
+            if len(self.children) > 2:
+                args = ", ".join(child.to_string() for child in self.children)
+                return f"{self.value}({args})"
         return self.value
 
     def depth(self) -> int:
@@ -279,6 +255,6 @@ class GrammarConfig:
         operators: List[Operator] = []
         operators.extend(UNARY_OPERATORS * int(self.unary_weight * 100))
         operators.extend(TS_OPERATORS * int(self.ts_weight * 100))
-        operators.extend(BINARY_OPERATORS * int(self.binary_weight * 100))
+        operators.extend((BINARY_OPERATORS + BINARY_TS_OPERATORS + TERNARY_OPERATORS) * int(self.binary_weight * 100))
         operators.extend(GROUP_OPERATORS * int(self.group_weight * 100))
         return operators if operators else UNARY_OPERATORS + TS_OPERATORS

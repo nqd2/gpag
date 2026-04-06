@@ -81,14 +81,14 @@ def concat_is_tests(result):
     return pd.concat(is_tests_list).reset_index(drop=True)
 
 
-def save_simulation_result(result):
+def save_simulation_result(result, output_dir: str = "output"):
     alpha_id = result["id"]
     region = result["settings"]["region"]
-    folder_path = "simulation_results/"
-    file_path = os.path.join(folder_path, f"{alpha_id}_{region}")
+    folder_path = os.path.join(output_dir, "simulation_results")
+    file_path = os.path.join(folder_path, f"{alpha_id}_{region}.json")
     os.makedirs(folder_path, exist_ok=True)
     with open(file_path, "w", encoding="utf-8") as file:
-        json.dump(result, file)
+        json.dump(result, file, ensure_ascii=False)
 
 
 def set_alpha_properties(
@@ -112,16 +112,16 @@ def set_alpha_properties(
     s.patch("https://api.worldquantbrain.com/alphas/" + alpha_id, json=params)
 
 
-def save_pnl(pnl_df, alpha_id, region):
-    folder_path = "alphas_pnl/"
-    file_path = os.path.join(folder_path, f"{alpha_id}_{region}")
+def save_pnl(pnl_df, alpha_id, region, output_dir: str = "output"):
+    folder_path = os.path.join(output_dir, "alphas_pnl")
+    file_path = os.path.join(folder_path, f"{alpha_id}_{region}.csv")
     os.makedirs(folder_path, exist_ok=True)
     pnl_df.to_csv(file_path)
 
 
-def save_yearly_stats(yearly_stats, alpha_id, region):
-    folder_path = "yearly_stats/"
-    file_path = os.path.join(folder_path, f"{alpha_id}_{region}")
+def save_yearly_stats(yearly_stats, alpha_id, region, output_dir: str = "output"):
+    folder_path = os.path.join(output_dir, "yearly_stats")
+    file_path = os.path.join(folder_path, f"{alpha_id}_{region}.csv")
     os.makedirs(folder_path, exist_ok=True)
     yearly_stats.to_csv(file_path, index=False)
 

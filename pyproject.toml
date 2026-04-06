@@ -11,12 +11,12 @@ requires-python = ">=3.10"
 dependencies = [
   "pandas>=2.0.0",
   "requests>=2.31.0",
+  "torch>=2.11.0",
   "tqdm>=4.66.0",
 ]
 
 [project.scripts]
-gpag = "modules.genentic.main:main"
-gpag-alpha = "modules.genentic.main:main"
+gpag = "modules.main:main"
 
 [dependency-groups]
 dev = [
